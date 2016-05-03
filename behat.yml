@@ -1,0 +1,39 @@
+default:
+    calls:
+        error_reporting: 32767
+    extensions:
+        Caciobanu\Behat\DeprecationExtension: ~
+
+weak:
+    calls:
+        error_reporting: 32767
+    extensions:
+        Caciobanu\Behat\DeprecationExtension:
+            mode: weak
+
+integer:
+    calls:
+        error_reporting: 32767
+    extensions:
+        Caciobanu\Behat\DeprecationExtension:
+            mode: 1
+
+default_no_error_reporting:
+    calls:
+        error_reporting: 0
+    extensions:
+        Caciobanu\Behat\DeprecationExtension: ~
+
+weak_no_error_reporting:
+    calls:
+        error_reporting: 0
+    extensions:
+        Caciobanu\Behat\DeprecationExtension:
+            mode: weak
+
+integer_no_error_reporting:
+    calls:
+        error_reporting: 0
+    extensions:
+        Caciobanu\Behat\DeprecationExtension:
+            mode: 1
