@@ -12,7 +12,7 @@ while (!file_exists($behat . '/vendor/bin/behat')) {
     $behat = dirname($behat);
 }
 
-passthru($behat . "/vendor/bin/behat --profile=weak --out=weak.log", $exitCode);
+passthru("php -d error_reporting=32767 " . $behat . "/vendor/bin/behat --profile=weak --out=weak.log", $exitCode);
 
 if ($exitCode === 1) {
     echo "\nExit code: 1";
