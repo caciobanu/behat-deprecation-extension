@@ -12,7 +12,7 @@ while (!file_exists($behat . '/vendor/bin/behat')) {
     $behat = dirname($behat);
 }
 
-passthru($behat . "/vendor/bin/behat --profile=default --out=default.log", $exitCode);
+passthru("php -d error_reporting=32767 " . $behat . "/vendor/bin/behat --profile=default --out=default.log", $exitCode);
 
 if ($exitCode === 1) {
     echo "Exit code: 1";
