@@ -21,11 +21,13 @@ if ($exitCode === 1) {
 ?>
 --EXPECTF--
 
-Unsilenced deprecation notices (1)
+Unsilenced deprecation notices (3)
 
-User deprecated feature: 1x
+User deprecated feature: 3x
     1x in Scenario: Silenced from file /home/travis/build/caciobanu/behat-deprecation-extension/features/normal.feature on line 7
         1x in Step: When I generate error on line 8
+    2x in Scenario: Unsilenced from file /home/travis/build/caciobanu/behat-deprecation-extension/features/normal_with_background_scenario.feature on line 5
+        2x in Step: When I generate error on line 3
 
 Remaining deprecation notices (2)
 

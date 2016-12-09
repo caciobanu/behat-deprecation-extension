@@ -118,7 +118,11 @@ class DeprecationErrorHandler
     private function detectScenario(FeatureNode $featureNode, StepNode $stepNode)
     {
         foreach ($featureNode->getScenarios() as $scenario) {
-            foreach ($scenario->getSteps() as $step) {
+            $steps = $scenario->getSteps();
+            if ($featureNode->hasBackground()) {
+                $steps = array_merge($featureNode->getBackground()->getSteps(), $steps);
+            }
+            foreach ($steps as $step) {
                 if ($step->getLine() === $stepNode->getLine() && $step->getText() === $stepNode->getText()) {
                     return $scenario;
                 }
