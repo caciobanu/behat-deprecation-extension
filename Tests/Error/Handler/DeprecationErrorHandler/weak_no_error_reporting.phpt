@@ -21,9 +21,9 @@ if ($exitCode === 0) {
 ?>
 --EXPECTF--
 
-Unsilenced deprecation notices (2)
+Unsilenced deprecation notices (6)
 
-Remaining deprecation notices (2)
+Remaining deprecation notices (4)
 
 Legacy deprecation notices (8)
 
