@@ -1,5 +1,5 @@
 {
-    "name": "caciobanu/behat-deprecation-extension",
+    "name": "myhammer/behat-deprecation-extension",
     "type": "behat-extension",
     "description": "Deprecation extension for Behat",
     "keywords": ["deprecation", "Behat", "bdd"],
