@@ -123,7 +123,7 @@ class DeprecationErrorHandler
                 $steps = array_merge($featureNode->getBackground()->getSteps(), $steps);
             }
             foreach ($steps as $step) {
-                if ($step->getLine() === $stepNode->getLine() && $step->getText() === $stepNode->getText()) {
+                if ($step->getLine() === $stepNode->getLine()) {
                     return $scenario;
                 }
             }
