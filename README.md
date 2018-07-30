@@ -11,7 +11,7 @@ A [Behat extension](http://behat.org) to display the whole list of user deprecat
 You can use [Composer](https://getcomposer.org/) to install the extension to your project:
 
 ```bash
-composer require caciobanu/behat-deprecation-extension
+composer require --dev caciobanu/behat-deprecation-extension
 ```
 
 Then, in your behat config file `behat.yml`, register the extension:
