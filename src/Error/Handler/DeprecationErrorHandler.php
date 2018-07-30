@@ -47,11 +47,18 @@ class DeprecationErrorHandler
     private $mode;
 
     /**
-     * @param int|string|null $mode The reporting mode.
+     * @var array|null $whitelist
      */
-    public function __construct($mode = null)
+    private $whitelist;
+
+    /**
+     * @param int|string|null $mode The reporting mode.
+     * @param array|null $whitelist
+     */
+    public function __construct($mode = null, array $whitelist = null)
     {
         $this->mode = $mode;
+        $this->whitelist = $whitelist;
     }
 
     /**
@@ -62,6 +69,10 @@ class DeprecationErrorHandler
     public function register(Call $call, $level, $message)
     {
         if (E_USER_DEPRECATED !== $level) {
+            return;
+        }
+
+        if (!$this->isCallerWhitelisted()) {
             return;
         }
 
@@ -204,5 +215,34 @@ class DeprecationErrorHandler
         }
 
         return defined('STDOUT') && function_exists('posix_isatty') && @posix_isatty(STDOUT);
+    }
+
+    private function getCaller()
+    {
+        $backtrace = debug_backtrace();
+        foreach ($backtrace as $item) {
+            if ('trigger_error' === $item['function']) {
+                return $item;
+            }
+        }
+    }
+
+    private function isCallerWhitelisted()
+    {
+        if (empty($this->whitelist)) {
+            return true;
+        }
+
+        $callerItem = $this->getCaller();
+
+        $didMatch = false;
+        foreach ($this->whitelist as $regex) {
+            if (preg_match($regex, $callerItem['file'])) {
+                $didMatch = true;
+                break;
+            }
+        }
+
+        return $didMatch;
     }
 }

@@ -42,6 +42,7 @@ class DeprecationExtensionTest extends TestCase
 
         $this->assertEquals('Caciobanu\Behat\DeprecationExtension\Error\Handler\DeprecationErrorHandler' ,$definition->getClass());
         $this->assertEquals('%caciobanu.deprecation_extension.mode%', (string) $definition->getArgument(0));
+        $this->assertEquals('%caciobanu.deprecation_extension.whitelist%', (string) $definition->getArgument(1));
     }
 
     /**
@@ -57,6 +58,26 @@ class DeprecationExtensionTest extends TestCase
             'testwork' => array(
                 'caciobanu_deprecation_extension' => array(
                     'mode' => 'test',
+                    'whitelist' => array(),
+                ),
+            ),
+        ));
+    }
+
+    /**
+     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
+     */
+    public function testConfigureInvalidWhitelistValue()
+    {
+        $configurationTree = new ConfigurationTree();
+        $tree = $configurationTree->getConfigTree(array(new DeprecationExtension()));
+
+        $processor = new Processor();
+        $processor->process($tree, array(
+            'testwork' => array(
+                'caciobanu_deprecation_extension' => array(
+                    'mode' => 'weak',
+                    'whitelist' => 'hello',
                 ),
             ),
         ));
@@ -75,11 +96,30 @@ class DeprecationExtensionTest extends TestCase
             'testwork' => array(
                 'caciobanu_deprecation_extension' => array(
                     'mode' => $mode,
+                    'whitelist' => array(),
                 ),
             ),
         ));
 
-        $this->assertEquals(array('caciobanu_deprecation_extension' => array('mode' => $mode)), $config);
+        $this->assertEquals(array('caciobanu_deprecation_extension' => array('mode' => $mode, 'whitelist' => array())), $config);
+    }
+
+    public function testConfigureWhitelist()
+    {
+        $configurationTree = new ConfigurationTree();
+        $tree = $configurationTree->getConfigTree(array(new DeprecationExtension()));
+
+        $processor = new Processor();
+        $config = $processor->process($tree, array(
+            'testwork' => array(
+                'caciobanu_deprecation_extension' => array(
+                    'mode' => 'weak',
+                    'whitelist' => array('#symfony#')
+                ),
+            ),
+        ));
+
+        $this->assertEquals(array('caciobanu_deprecation_extension' => array('mode' => 'weak', 'whitelist' => array('#symfony#'))), $config);
     }
 
     public function configValueProvider()

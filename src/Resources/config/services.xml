@@ -6,6 +6,7 @@
         <service id="caciobanu.deprecation_extension.deprecation_error_handler"
                  class="Caciobanu\Behat\DeprecationExtension\Error\Handler\DeprecationErrorHandler">
             <argument>%caciobanu.deprecation_extension.mode%</argument>
+            <argument>%caciobanu.deprecation_extension.whitelist%</argument>
         </service>
     </services>
 </container>
