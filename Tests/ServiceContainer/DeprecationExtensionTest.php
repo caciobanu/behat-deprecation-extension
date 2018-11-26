@@ -4,6 +4,7 @@ namespace Caciobanu\Behat\DeprecationExtension\Tests\ServiceContainer;
 
 use Behat\Testwork\ServiceContainer\Configuration\ConfigurationTree;
 use Caciobanu\Behat\DeprecationExtension\ServiceContainer\DeprecationExtension;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -11,7 +12,7 @@ use Symfony\Component\DependencyInjection\Definition;
 /**
  * @author Catalin Ciobanu <caciobanu@gmail.com>
  */
-class DeprecationExtensionTest extends \PHPUnit_Framework_TestCase
+class DeprecationExtensionTest extends TestCase
 {
     public function testProcess()
     {

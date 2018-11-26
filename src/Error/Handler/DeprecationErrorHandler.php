@@ -21,6 +21,7 @@ use Behat\Testwork\Call\Call;
  */
 class DeprecationErrorHandler
 {
+    const TRACE_INDEX = 4;
     const MODE_WEAK = 'weak';
 
     private static $shutdownFunctionIsRegistered = false;
@@ -55,14 +56,16 @@ class DeprecationErrorHandler
 
     /**
      * @param Call $call
-     * @param int $type
-     * @param string $msg
+     * @param integer $level
+     * @param string $message
      */
-    public function register(Call $call, $type, $msg)
+    public function register(Call $call, $level, $message)
     {
-        if (E_USER_DEPRECATED !== $type) {
+        if (E_USER_DEPRECATED !== $level) {
             return;
         }
+
+        $trace = debug_backtrace();
 
         $group = 'remaining';
         if (0 !== error_reporting()) {
@@ -75,35 +78,25 @@ class DeprecationErrorHandler
             if ($call->getFeature()->hasTag('legacy') || $scenario->hasTag('legacy')) {
                 $group = 'legacy';
             }
-
-            $feature = $scenario->getKeyword() . ': ' . $scenario->getTitle();
-            $keyFeature = $feature . ' ' . $call->getFeature()->getFile() . ' ' . $scenario->getLine();
-
-            $this->deprecations[$group][$msg][$keyFeature]['feature'] = $feature;
-            $this->deprecations[$group][$msg][$keyFeature]['file'] = $call->getFeature()->getFile();
-            $this->deprecations[$group][$msg][$keyFeature]['line'] = $scenario->getLine();
-
-            if (!isset($this->deprecations[$group][$msg][$keyFeature]['count'])) {
-                $this->deprecations[$group][$msg][$keyFeature]['count'] = 0;
-            }
-            $this->deprecations[$group][$msg][$keyFeature]['count']++;
-
-            $step = $call->getStep()->getKeyword() . ' ' . $call->getStep()->getText();
-            $keyStep = $step . ' ' . $call->getFeature()->getLine();
-
-            $this->deprecations[$group][$msg][$keyFeature]['steps'][$keyStep]['step'] = $step;
-            $this->deprecations[$group][$msg][$keyFeature]['steps'][$keyStep]['line'] = $call->getStep()->getLine();
-
-            if (!isset($this->deprecations[$group][$msg][$keyFeature]['steps'][$keyStep]['count'])) {
-                $this->deprecations[$group][$msg][$keyFeature]['steps'][$keyStep]['count'] = 0;
-            }
-            $this->deprecations[$group][$msg][$keyFeature]['steps'][$keyStep]['count']++;
         }
 
-        if (!isset($this->deprecations[$group][$msg]['count'])) {
-            $this->deprecations[$group][$msg]['count'] = 0;
+        if (isset($trace[self::TRACE_INDEX])) {
+            if (isset($trace[self::TRACE_INDEX]['object']) || isset($trace[self::TRACE_INDEX]['class'])) {
+                $class = isset($trace[self::TRACE_INDEX]['object']) ? get_class($trace[self::TRACE_INDEX]['object']) : $trace[self::TRACE_INDEX]['class'];
+                $method = $trace[self::TRACE_INDEX]['function'];
+
+                if (!isset($this->deprecations[$group][$message][$class . '::' . $method])) {
+                    $this->deprecations[$group][$message][$class . '::' . $method] = 0;
+                }
+
+                $this->deprecations[$group][$message][$class . '::' . $method]++;
+            }
         }
-        $this->deprecations[$group][$msg]['count']++;
+
+        if (!isset($this->deprecations[$group][$message]['count'])) {
+            $this->deprecations[$group][$message]['count'] = 0;
+        }
+        $this->deprecations[$group][$message]['count']++;
 
         $this->deprecations[$group . 'Count']++;
 
@@ -148,6 +141,7 @@ class DeprecationErrorHandler
      */
     public function displayDeprecations()
     {
+        $newLine = false;
         foreach (array('unsilenced', 'remaining', 'legacy') as $group) {
             if ($this->deprecations[$group . 'Count']) {
                 echo "\n", $this->colorize(
@@ -158,24 +152,21 @@ class DeprecationErrorHandler
                 if (self::MODE_WEAK === $this->mode) {
                     continue;
                 }
+                $newLine = true;
 
-                foreach ($this->deprecations[$group] as $msg => $features) {
-                    echo "\n", rtrim($msg, '.'), ': ', $features['count'], "x\n";
+                foreach ($this->deprecations[$group] as $msg => $notices) {
+                    echo "\n", rtrim($msg, '.'), ': ', $notices['count'], "x\n";
 
-                    unset($features['count']);
+                    unset($notices['count']);
 
-                    foreach ($features as $steps) {
-                        echo "    ", $steps['count'], 'x in ', $steps['feature'], ' from file ', $steps['file'], ' on line ', $steps['line'], "\n";
-
-                        foreach ($steps['steps'] as $step) {
-                            echo "        ", $step['count'], 'x in Step: ', $step['step'], ' on line ', $step['line'], "\n";
-                        }
+                    foreach ($notices as $method => $count) {
+                        echo '    ', $count, 'x in ', preg_replace('/(.*)\\\\(.*?::.*?)$/', '$2 from $1', $method), "\n";
                     }
                 }
             }
         }
 
-        if (!empty($features)) {
+        if ($newLine) {
             echo "\n";
         }
 
@@ -198,9 +189,9 @@ class DeprecationErrorHandler
             $color = $red ? '41;37' : '43;30';
 
             return "\x1B[{$color}m{$str}\x1B[0m";
-        } else {
-            return $str;
         }
+
+        return $str;
     }
 
     /**

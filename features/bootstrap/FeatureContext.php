@@ -1,19 +1,20 @@
 <?php
 
 use Behat\Behat\Context\Context;
-use Behat\Behat\Context\SnippetAcceptingContext;
+use Caciobanu\Behat\DeprecationExtension\Tests\Deprecated\DeprecatedCaller;
 
 /**
  * Defines application features from the specific context.
  */
-class FeatureContext implements Context, SnippetAcceptingContext
+class FeatureContext implements Context
 {
     /**
      * @When I generate silenced error
      */
     public function whenIGenerateSilencedError()
     {
-        @trigger_error("User deprecated feature silenced.", E_USER_DEPRECATED);
+        $tmp = new DeprecatedCaller();
+        $tmp->callDeprecatedMethodSilenced();
     }
 
     /**
@@ -21,6 +22,8 @@ class FeatureContext implements Context, SnippetAcceptingContext
      */
     public function whenIGenerateError()
     {
-        trigger_error("User deprecated feature.", E_USER_DEPRECATED);
+
+        $tmp = new DeprecatedCaller();
+        $tmp->callDeprecatedMethodUnsilenced();
     }
 }

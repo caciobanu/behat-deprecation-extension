@@ -10,15 +10,17 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Testwork\Suite\GenericSuite;
 use Caciobanu\Behat\DeprecationExtension\Call\Handler\RuntimeCallHandler;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @author Catalin Ciobanu <caciobanu@gmail.com>
  */
-class RuntimeCallHandlerTest extends \PHPUnit_Framework_TestCase
+class RuntimeCallHandlerTest extends TestCase
 {
     public function testHandlerIsCalled()
     {
-        $errorHandlerMock = $this->getMock('Caciobanu\Behat\DeprecationExtension\Error\Handler\DeprecationErrorHandler');
+        $errorHandlerMock = $this->getMockBuilder('Caciobanu\Behat\DeprecationExtension\Error\Handler\DeprecationErrorHandler')
+            ->getMock();
 
         $call = $this->getCall();
         $errorHandlerMock->expects($this->once())

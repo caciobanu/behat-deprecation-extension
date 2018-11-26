@@ -23,33 +23,20 @@ if ($exitCode === 1) {
 
 Unsilenced deprecation notices (3)
 
-User deprecated feature: 3x
-    1x in Scenario: Silenced from file features/normal.feature on line 7
-        1x in Step: When I generate error on line 8
-    2x in Scenario: Unsilenced from file features/normal_with_background_scenario.feature on line 5
-        2x in Step: When I generate error on line 3
+Method 'deprecatedMethodUnsilenced' is deprecated: 3x
+    3x in DeprecatedCaller::callDeprecatedMethodUnsilenced from Caciobanu\Behat\DeprecationExtension\Tests\Deprecated
 
 Remaining deprecation notices (2)
 
-User deprecated feature silenced: 2x
-    2x in Scenario: Unsilenced from file features/normal.feature on line 3
-        1x in Step: When I generate silenced error on line 4
-        1x in Step: And I generate silenced error on line 5
+Method 'deprecatedMethodSilenced' is deprecated: 2x
+    2x in DeprecatedCaller::callDeprecatedMethodSilenced from Caciobanu\Behat\DeprecationExtension\Tests\Deprecated
 
 Legacy deprecation notices (6)
 
-User deprecated feature silenced: 4x
-    2x in Scenario: Unsilenced from file features/legacy_feature.feature on line 4
-        1x in Step: When I generate silenced error on line 5
-        1x in Step: And I generate silenced error on line 6
-    2x in Scenario: Unsilenced from file features/legacy_scenario.feature on line 4
-        1x in Step: When I generate silenced error on line 5
-        1x in Step: And I generate silenced error on line 6
+Method 'deprecatedMethodSilenced' is deprecated: 4x
+    4x in DeprecatedCaller::callDeprecatedMethodSilenced from Caciobanu\Behat\DeprecationExtension\Tests\Deprecated
 
-User deprecated feature: 2x
-    1x in Scenario: Silenced from file features/legacy_feature.feature on line 8
-        1x in Step: When I generate error on line 9
-    1x in Scenario: Silenced from file features/legacy_scenario.feature on line 9
-        1x in Step: When I generate error on line 10
+Method 'deprecatedMethodUnsilenced' is deprecated: 2x
+    2x in DeprecatedCaller::callDeprecatedMethodUnsilenced from Caciobanu\Behat\DeprecationExtension\Tests\Deprecated
 
 Exit code: 1

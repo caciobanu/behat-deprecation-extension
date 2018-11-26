@@ -23,42 +23,20 @@ if ($exitCode === 1) {
 
 Unsilenced deprecation notices (6)
 
-User deprecated feature: 6x
-    2x in Scenario: Silenced from file features/normal.feature on line 7
-        1x in Step: When I generate error on line 8
-        1x in Step: And I generate error on line 9
-    2x in Scenario: Unsilenced from file features/normal_with_background_scenario.feature on line 5
-        2x in Step: When I generate error on line 3
-    2x in Scenario: Silenced from file features/normal_with_background_scenario.feature on line 9
-        1x in Step: When I generate error on line 10
-        1x in Step: And I generate error on line 11
+Method 'deprecatedMethodUnsilenced' is deprecated: 6x
+    6x in DeprecatedCaller::callDeprecatedMethodUnsilenced from Caciobanu\Behat\DeprecationExtension\Tests\Deprecated
 
 Remaining deprecation notices (4)
 
-User deprecated feature silenced: 4x
-    2x in Scenario: Unsilenced from file features/normal.feature on line 3
-        1x in Step: When I generate silenced error on line 4
-        1x in Step: And I generate silenced error on line 5
-    2x in Scenario: Unsilenced from file features/normal_with_background_scenario.feature on line 5
-        1x in Step: When I generate silenced error on line 6
-        1x in Step: And I generate silenced error on line 7
+Method 'deprecatedMethodSilenced' is deprecated: 4x
+    4x in DeprecatedCaller::callDeprecatedMethodSilenced from Caciobanu\Behat\DeprecationExtension\Tests\Deprecated
 
 Legacy deprecation notices (8)
 
-User deprecated feature silenced: 4x
-    2x in Scenario: Unsilenced from file features/legacy_feature.feature on line 4
-        1x in Step: When I generate silenced error on line 5
-        1x in Step: And I generate silenced error on line 6
-    2x in Scenario: Unsilenced from file features/legacy_scenario.feature on line 4
-        1x in Step: When I generate silenced error on line 5
-        1x in Step: And I generate silenced error on line 6
+Method 'deprecatedMethodSilenced' is deprecated: 4x
+    4x in DeprecatedCaller::callDeprecatedMethodSilenced from Caciobanu\Behat\DeprecationExtension\Tests\Deprecated
 
-User deprecated feature: 4x
-    2x in Scenario: Silenced from file features/legacy_feature.feature on line 8
-        1x in Step: When I generate error on line 9
-        1x in Step: And I generate error on line 10
-    2x in Scenario: Silenced from file features/legacy_scenario.feature on line 9
-        1x in Step: When I generate error on line 10
-        1x in Step: And I generate error on line 11
+Method 'deprecatedMethodUnsilenced' is deprecated: 4x
+    4x in DeprecatedCaller::callDeprecatedMethodUnsilenced from Caciobanu\Behat\DeprecationExtension\Tests\Deprecated
 
 Exit code: 1
