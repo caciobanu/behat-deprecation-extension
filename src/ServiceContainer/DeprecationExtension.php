@@ -59,7 +59,7 @@ class DeprecationExtension implements Extension
     {
         $builder
             ->children()
-                ->arrayNode('whitelist')
+                ->arrayNode('ignoreDeprecations')
                     ->scalarPrototype()->end()
                 ->end()
                 ->scalarNode('mode')
@@ -84,7 +84,8 @@ class DeprecationExtension implements Extension
     public function load(ContainerBuilder $container, array $config)
     {
         $container->setParameter('caciobanu.deprecation_extension.mode', $config['mode']);
-        $container->setParameter('caciobanu.deprecation_extension.whitelist', isset($config['whitelist']) ? $config['whitelist'] : array());
+        $ignoreDeprecations = isset($config['ignoreDeprecations']) ? $config['ignoreDeprecations'] : array();
+        $container->setParameter('caciobanu.deprecation_extension.ignoreDeprecations', $ignoreDeprecations);
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');

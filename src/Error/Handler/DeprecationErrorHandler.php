@@ -47,18 +47,18 @@ class DeprecationErrorHandler
     private $mode;
 
     /**
-     * @var array|null $whitelist
+     * @var array $ignoreDeprecations
      */
-    private $whitelist;
+    private $ignoreDeprecations;
 
     /**
      * @param int|string|null $mode The reporting mode.
-     * @param array|null $whitelist
+     * @param array $ignoreDeprecations
      */
-    public function __construct($mode = null, array $whitelist = null)
+    public function __construct($mode = null, array $ignoreDeprecations = array())
     {
         $this->mode = $mode;
-        $this->whitelist = $whitelist;
+        $this->ignoreDeprecations = $ignoreDeprecations;
     }
 
     /**
@@ -72,7 +72,7 @@ class DeprecationErrorHandler
             return;
         }
 
-        if (!$this->isCallerWhitelisted()) {
+        if ($this->isCallerIgnored()) {
             return;
         }
 
@@ -227,22 +227,23 @@ class DeprecationErrorHandler
         }
     }
 
-    private function isCallerWhitelisted()
+    /**
+     * @return bool
+     */
+    private function isCallerIgnored()
     {
-        if (empty($this->whitelist)) {
-            return true;
+        if (empty($this->ignoreDeprecations)) {
+            return false;
         }
 
         $callerItem = $this->getCaller();
 
-        $didMatch = false;
-        foreach ($this->whitelist as $regex) {
+        foreach ($this->ignoreDeprecations as $regex) {
             if (preg_match($regex, $callerItem['file'])) {
-                $didMatch = true;
-                break;
+                return true;
             }
         }
 
-        return $didMatch;
+        return false;
     }
 }

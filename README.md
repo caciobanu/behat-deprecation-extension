@@ -50,7 +50,7 @@ Run Behat and enjoy :)
 - Remaining
     - Deprecation notices are all other (non-legacy) notices.
 
-## Filter deprecated call
+## Ignore some deprecation
 
 You can filter the file that did make the call to `trigger_error` like this:
 
@@ -58,12 +58,12 @@ You can filter the file that did make the call to `trigger_error` like this:
 default:
     extensions:
         Caciobanu\Behat\DeprecationExtension:
-            whitelist: 
+            ignoreDeprecations:
                 - '#symfony#'
                 - '#my-app#'
 ```
 
-It will ignore every files that does not match the listed regexps
+It will ignore every files that matches the listed regexps
 
 ## Credits
 
