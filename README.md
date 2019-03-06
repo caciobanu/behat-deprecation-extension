@@ -58,12 +58,36 @@ You can filter the file that did make the call to `trigger_error` like this:
 default:
     extensions:
         Caciobanu\Behat\DeprecationExtension:
-            ignoreDeprecations:
-                - '#symfony#'
-                - '#my-app#'
+            ignore:
+                - { file: '#symfony#' }
+                - { file: '#my-app#' }
 ```
 
-It will ignore every files that matches the listed regexps
+It will ignore every files that matches any of the listed regexps
+
+Or you can filter deprecation messages like this:
+
+```yaml
+default:
+    extensions:
+        Caciobanu\Behat\DeprecationExtension:
+            ignore:
+                - { message: '#symfony#' }
+                - { message: '#my-app#' }
+```
+
+It will ignore every deprecation message that matches any of the listed regexps
+
+You can use both filter types at the same time:
+
+
+```yaml
+default:
+    extensions:
+        Caciobanu\Behat\DeprecationExtension:
+            ignore:
+                - { file: '#symfony#', message: '#symfony#' }
+```
 
 ## Credits
 
