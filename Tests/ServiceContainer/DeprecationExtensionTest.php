@@ -42,7 +42,7 @@ class DeprecationExtensionTest extends TestCase
 
         $this->assertEquals('Caciobanu\Behat\DeprecationExtension\Error\Handler\DeprecationErrorHandler' ,$definition->getClass());
         $this->assertEquals('%caciobanu.deprecation_extension.mode%', (string) $definition->getArgument(0));
-        $this->assertEquals('%caciobanu.deprecation_extension.ignoreDeprecations%', (string) $definition->getArgument(1));
+        $this->assertEquals('%caciobanu.deprecation_extension.ignore%', (string) $definition->getArgument(1));
     }
 
     /**
@@ -58,7 +58,6 @@ class DeprecationExtensionTest extends TestCase
             'testwork' => array(
                 'caciobanu_deprecation_extension' => array(
                     'mode' => 'test',
-                    'ignoreDeprecations' => array(),
                 ),
             ),
         ));
@@ -67,7 +66,7 @@ class DeprecationExtensionTest extends TestCase
     /**
      * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
      */
-    public function testConfigureInvalidIgnoreDeprecationsValue()
+    public function testConfigureInvalidIgnoreValue()
     {
         $configurationTree = new ConfigurationTree();
         $tree = $configurationTree->getConfigTree(array(new DeprecationExtension()));
@@ -77,7 +76,7 @@ class DeprecationExtensionTest extends TestCase
             'testwork' => array(
                 'caciobanu_deprecation_extension' => array(
                     'mode' => 'weak',
-                    'ignoreDeprecations' => 'hello',
+                    'ignore' => array('hello'),
                 ),
             ),
         ));
@@ -96,15 +95,17 @@ class DeprecationExtensionTest extends TestCase
             'testwork' => array(
                 'caciobanu_deprecation_extension' => array(
                     'mode' => $mode,
-                    'ignoreDeprecations' => array(),
                 ),
             ),
         ));
 
-        $this->assertEquals(array('caciobanu_deprecation_extension' => array('mode' => $mode, 'ignoreDeprecations' => array())), $config);
+        $this->assertEquals(array('caciobanu_deprecation_extension' => array('mode' => $mode, 'ignore' => array())), $config);
     }
 
-    public function testConfigureIgnoreDeprecations()
+    /**
+     * @dataProvider configIgnoreValueProvider
+     */
+    public function testConfigureIgnore($ignore)
     {
         $configurationTree = new ConfigurationTree();
         $tree = $configurationTree->getConfigTree(array(new DeprecationExtension()));
@@ -114,12 +115,12 @@ class DeprecationExtensionTest extends TestCase
             'testwork' => array(
                 'caciobanu_deprecation_extension' => array(
                     'mode' => 'weak',
-                    'ignoreDeprecations' => array('#symfony#')
+                    'ignore' => $ignore
                 ),
             ),
         ));
 
-        $this->assertEquals(array('caciobanu_deprecation_extension' => array('mode' => 'weak', 'ignoreDeprecations' => array('#symfony#'))), $config);
+        $this->assertEquals(array('caciobanu_deprecation_extension' => array('mode' => 'weak', 'ignore' => $ignore)), $config);
     }
 
     public function configValueProvider()
@@ -130,6 +131,15 @@ class DeprecationExtensionTest extends TestCase
             array(0),
             array(10),
             array(100),
+        );
+    }
+
+    public function configIgnoreValueProvider()
+    {
+        return array(
+            array(array(array('file' => 'file'))),
+            array(array(array('message' => 'message'))),
+            array(array(array('file' => 'file', 'message' => 'message'), array('file' => 'file', 'message' => 'message'))),
         );
     }
 }

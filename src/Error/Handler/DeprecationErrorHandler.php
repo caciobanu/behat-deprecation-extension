@@ -47,18 +47,18 @@ class DeprecationErrorHandler
     private $mode;
 
     /**
-     * @var array $ignoreDeprecations
+     * @var array $ignore
      */
-    private $ignoreDeprecations;
+    private $ignore;
 
     /**
      * @param int|string|null $mode The reporting mode.
-     * @param array $ignoreDeprecations
+     * @param array $ignore
      */
-    public function __construct($mode = null, array $ignoreDeprecations = array())
+    public function __construct($mode = null, array $ignore = array())
     {
         $this->mode = $mode;
-        $this->ignoreDeprecations = $ignoreDeprecations;
+        $this->ignore = $ignore;
     }
 
     /**
@@ -72,7 +72,7 @@ class DeprecationErrorHandler
             return;
         }
 
-        if ($this->isCallerIgnored()) {
+        if ($this->isIgnored($message)) {
             return;
         }
 
@@ -228,18 +228,25 @@ class DeprecationErrorHandler
     }
 
     /**
+     * @param string $message
      * @return bool
      */
-    private function isCallerIgnored()
+    private function isIgnored($message)
     {
-        if (empty($this->ignoreDeprecations)) {
+        if (empty($this->ignore)) {
             return false;
         }
 
         $callerItem = $this->getCaller();
 
-        foreach ($this->ignoreDeprecations as $regex) {
-            if (preg_match($regex, $callerItem['file'])) {
+        foreach ($this->ignore as $ignore) {
+            if (isset($ignore['file'], $ignore['message'])) {
+                return preg_match($ignore['file'], $callerItem['file']) && preg_match($ignore['message'], $message);
+            }
+            if (isset($ignore['file']) && preg_match($ignore['file'], $callerItem['file'])) {
+                return true;
+            }
+            if (isset($ignore['message']) && preg_match($ignore['message'], $message)) {
                 return true;
             }
         }

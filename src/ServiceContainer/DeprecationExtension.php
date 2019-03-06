@@ -59,8 +59,23 @@ class DeprecationExtension implements Extension
     {
         $builder
             ->children()
-                ->arrayNode('ignoreDeprecations')
-                    ->scalarPrototype()->end()
+                ->arrayNode('ignore')
+                    ->arrayPrototype()
+                        ->children()
+                            ->scalarNode('file')->end()
+                            ->scalarNode('message')->end()
+                        ->end()
+                        ->validate()
+                            ->ifTrue(function ($value) {
+                                if (!isset($value['file']) && !isset($value['message'])) {
+                                    return true;
+                                }
+
+                                return false;
+                            })
+                            ->thenInvalid('At least "file" or "message" must be set')
+                        ->end()
+                    ->end()
                 ->end()
                 ->scalarNode('mode')
                     ->defaultValue(null)
@@ -84,8 +99,8 @@ class DeprecationExtension implements Extension
     public function load(ContainerBuilder $container, array $config)
     {
         $container->setParameter('caciobanu.deprecation_extension.mode', $config['mode']);
-        $ignoreDeprecations = isset($config['ignoreDeprecations']) ? $config['ignoreDeprecations'] : array();
-        $container->setParameter('caciobanu.deprecation_extension.ignoreDeprecations', $ignoreDeprecations);
+        $ignore = isset($config['ignore']) ? $config['ignore'] : array();
+        $container->setParameter('caciobanu.deprecation_extension.ignore', $ignore);
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
