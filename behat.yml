@@ -18,6 +18,30 @@ integer:
         Caciobanu\Behat\DeprecationExtension:
             mode: 1
 
+ignore_file:
+    calls:
+        error_reporting: 32767
+    extensions:
+        Caciobanu\Behat\DeprecationExtension:
+            ignore:
+                - { file: '#DeprecatedClass#' }
+
+ignore_message:
+    calls:
+        error_reporting: 32767
+    extensions:
+        Caciobanu\Behat\DeprecationExtension:
+            ignore:
+                - { message: '#deprecatedMethodUnsilenced#' }
+
+ignore_file_and_message:
+    calls:
+        error_reporting: 32767
+    extensions:
+        Caciobanu\Behat\DeprecationExtension:
+            ignore:
+                - { file: '#DeprecatedClass#', message: '#deprecatedMethodUnsilenced#' }
+
 default_no_error_reporting:
     calls:
         error_reporting: 0

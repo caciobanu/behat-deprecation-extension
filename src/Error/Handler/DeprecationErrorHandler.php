@@ -47,11 +47,18 @@ class DeprecationErrorHandler
     private $mode;
 
     /**
-     * @param int|string|null $mode The reporting mode.
+     * @var array $ignore
      */
-    public function __construct($mode = null)
+    private $ignore;
+
+    /**
+     * @param int|string|null $mode The reporting mode.
+     * @param array $ignore
+     */
+    public function __construct($mode = null, array $ignore = array())
     {
         $this->mode = $mode;
+        $this->ignore = $ignore;
     }
 
     /**
@@ -62,6 +69,10 @@ class DeprecationErrorHandler
     public function register(Call $call, $level, $message)
     {
         if (E_USER_DEPRECATED !== $level) {
+            return;
+        }
+
+        if ($this->isIgnored($message)) {
             return;
         }
 
@@ -204,5 +215,42 @@ class DeprecationErrorHandler
         }
 
         return defined('STDOUT') && function_exists('posix_isatty') && @posix_isatty(STDOUT);
+    }
+
+    private function getCaller()
+    {
+        $backtrace = debug_backtrace();
+        foreach ($backtrace as $item) {
+            if ('trigger_error' === $item['function']) {
+                return $item;
+            }
+        }
+    }
+
+    /**
+     * @param string $message
+     * @return bool
+     */
+    private function isIgnored($message)
+    {
+        if (empty($this->ignore)) {
+            return false;
+        }
+
+        $callerItem = $this->getCaller();
+
+        foreach ($this->ignore as $ignore) {
+            if (isset($ignore['file'], $ignore['message'])) {
+                return preg_match($ignore['file'], $callerItem['file']) && preg_match($ignore['message'], $message);
+            }
+            if (isset($ignore['file']) && preg_match($ignore['file'], $callerItem['file'])) {
+                return true;
+            }
+            if (isset($ignore['message']) && preg_match($ignore['message'], $message)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

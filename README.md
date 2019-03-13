@@ -50,6 +50,45 @@ Run Behat and enjoy :)
 - Remaining
     - Deprecation notices are all other (non-legacy) notices.
 
+## Ignore some deprecation
+
+You can filter the file that did make the call to `trigger_error` like this:
+
+```yaml
+default:
+    extensions:
+        Caciobanu\Behat\DeprecationExtension:
+            ignore:
+                - { file: '#symfony#' }
+                - { file: '#my-app#' }
+```
+
+It will ignore every files that matches any of the listed regexps
+
+Or you can filter deprecation messages like this:
+
+```yaml
+default:
+    extensions:
+        Caciobanu\Behat\DeprecationExtension:
+            ignore:
+                - { message: '#symfony#' }
+                - { message: '#my-app#' }
+```
+
+It will ignore every deprecation message that matches any of the listed regexps
+
+You can use both filter types at the same time:
+
+
+```yaml
+default:
+    extensions:
+        Caciobanu\Behat\DeprecationExtension:
+            ignore:
+                - { file: '#symfony#', message: '#symfony#' }
+```
+
 ## Credits
 
 This library is developed by [Catalin Ciobanu](https://github.com/caciobanu).
