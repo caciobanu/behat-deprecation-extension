@@ -8,24 +8,24 @@ cache:
 
 jobs:
     include:
-#         - php: 5.3
-#           dist: precise
-#           env: COMPOSER_MEMORY_LIMIT=4G
-#         - php: 5.4
-#           dist: trusty
-#         - php: 5.5
-#           dist: trusty
-#         - php: 5.6
-#           dist: xenial
-#         - php: 7.0
-#           dist: xenial
-#         - php: 7.1
-#         - php: 7.2
-#         - php: 7.3
+        - php: 5.3
+          dist: precise
+          env: COMPOSER_MEMORY_LIMIT=4G
+        - php: 5.4
+          dist: trusty
+        - php: 5.5
+          dist: trusty
+        - php: 5.6
+          dist: xenial
+        - php: 7.0
+          dist: xenial
+        - php: 7.1
+        - php: 7.2
+        - php: 7.3
         - php: 7.4
-#         - php: nightly
-#     allow_failures:
-#         - php: nightly
+        - php: nightly
+    allow_failures:
+        - php: nightly
 
 install:
     - composer self-update
