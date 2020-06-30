@@ -10,25 +10,26 @@ jobs:
     include:
         - php: 5.3
           dist: precise
-        - php: 5.4
-          dist: trusty
-        - php: 5.5
-          dist: trusty
-        - php: 5.6
-          dist: xenial
-        - php: 7.0
-          dist: xenial
-        - php: 7.1
-        - php: 7.2
-        - php: 7.3
-        - php: 7.4
-        - php: nightly
-    allow_failures:
-        - php: nightly
+          env: COMPOSER_MEMORY_LIMIT=4G
+#         - php: 5.4
+#           dist: trusty
+#         - php: 5.5
+#           dist: trusty
+#         - php: 5.6
+#           dist: xenial
+#         - php: 7.0
+#           dist: xenial
+#         - php: 7.1
+#         - php: 7.2
+#         - php: 7.3
+#         - php: 7.4
+#         - php: nightly
+#     allow_failures:
+#         - php: nightly
 
 install:
     - composer self-update
-    - COMPOSER_MEMORY_LIMIT=2G composer install
+    - composer install
 
 script:
     - vendor/bin/phpunit
