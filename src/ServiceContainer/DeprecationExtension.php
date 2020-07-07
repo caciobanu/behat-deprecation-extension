@@ -60,7 +60,7 @@ class DeprecationExtension implements Extension
         $builder
             ->children()
                 ->arrayNode('ignore')
-                    ->arrayPrototype()
+                    ->prototype('array')
                         ->children()
                             ->scalarNode('file')->end()
                             ->scalarNode('message')->end()
