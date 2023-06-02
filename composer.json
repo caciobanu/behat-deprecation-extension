@@ -12,11 +12,11 @@
         }
     ],
     "require": {
-        "php":             ">=5.3.3",
-        "behat/behat":     "~3.0"
+         "php": "^7.4 || ^8.0",
+        "behat/behat": "^3.6.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "^4.8.36|^6.3|^7.5.15"
+        "phpunit/phpunit": "^8.5 || ^9.0"
     },
     "autoload": {
         "psr-4": { "Caciobanu\\Behat\\DeprecationExtension\\": "src/" }
