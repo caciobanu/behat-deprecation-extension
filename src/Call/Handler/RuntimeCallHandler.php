@@ -126,7 +126,7 @@ final class RuntimeCallHandler implements CallHandler
 
         try {
             $this->call = $call;
-            $return = call_user_func_array($callable, $arguments);
+            $return = call_user_func_array($callable, array_values($arguments));
         } catch (Exception $caught) {
             $exception = $caught;
         }
