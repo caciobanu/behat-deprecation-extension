@@ -5,6 +5,7 @@ namespace Caciobanu\Behat\DeprecationExtension\Tests\ServiceContainer;
 use Behat\Testwork\ServiceContainer\Configuration\ConfigurationTree;
 use Caciobanu\Behat\DeprecationExtension\ServiceContainer\DeprecationExtension;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -45,11 +46,10 @@ class DeprecationExtensionTest extends TestCase
         $this->assertEquals('%caciobanu.deprecation_extension.ignore%', (string) $definition->getArgument(1));
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     */
     public function testConfigureInvalidValue()
     {
+        $this->expectException(InvalidConfigurationException::class);
+        
         $configurationTree = new ConfigurationTree();
         $tree = $configurationTree->getConfigTree(array(new DeprecationExtension()));
 
@@ -63,11 +63,10 @@ class DeprecationExtensionTest extends TestCase
         ));
     }
 
-    /**
-     * @expectedException \Symfony\Component\Config\Definition\Exception\InvalidConfigurationException
-     */
     public function testConfigureInvalidIgnoreValue()
     {
+        $this->expectException(InvalidConfigurationException::class);
+        
         $configurationTree = new ConfigurationTree();
         $tree = $configurationTree->getConfigTree(array(new DeprecationExtension()));
 
