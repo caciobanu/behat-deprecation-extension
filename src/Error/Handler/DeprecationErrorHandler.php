@@ -79,7 +79,7 @@ class DeprecationErrorHandler
         $trace = debug_backtrace();
 
         $group = 'remaining';
-        if (E_USER_DEPRECATED !== (error_reporting() & E_USER_DEPRECATED)) {
+        if (E_USER_DEPRECATED === (error_reporting() & E_USER_DEPRECATED)) {
             $group = 'unsilenced';
         }
 
