@@ -13,9 +13,8 @@ namespace Caciobanu\Behat\DeprecationExtension\ServiceContainer;
 use Behat\Testwork\ServiceContainer\Extension;
 use Behat\Testwork\ServiceContainer\ExtensionManager;
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
-use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
@@ -27,7 +26,7 @@ class DeprecationExtension implements Extension
     /**
      * @inheritdoc
      */
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $defintion = $container->getDefinition('call.call_handler.runtime');
         $defintion->setClass('Caciobanu\Behat\DeprecationExtension\Call\Handler\RuntimeCallHandler');
@@ -40,7 +39,7 @@ class DeprecationExtension implements Extension
     /**
      * @inheritdoc
      */
-    public function getConfigKey()
+    public function getConfigKey(): string
     {
         return 'caciobanu_deprecation_extension';
     }
@@ -48,14 +47,14 @@ class DeprecationExtension implements Extension
     /**
      * @inheritdoc
      */
-    public function initialize(ExtensionManager $extensionManager)
+    public function initialize(ExtensionManager $extensionManager): void
     {
     }
 
     /**
      * @inheritdoc
      */
-    public function configure(ArrayNodeDefinition $builder)
+    public function configure(ArrayNodeDefinition $builder): void
     {
         $builder
             ->children()
@@ -96,13 +95,15 @@ class DeprecationExtension implements Extension
     /**
      * @inheritdoc
      */
-    public function load(ContainerBuilder $container, array $config)
+    public function load(ContainerBuilder $container, array $config): void
     {
         $container->setParameter('caciobanu.deprecation_extension.mode', $config['mode']);
         $ignore = isset($config['ignore']) ? $config['ignore'] : array();
         $container->setParameter('caciobanu.deprecation_extension.ignore', $ignore);
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
-        $loader->load('services.xml');
+        $container->setDefinition('caciobanu.deprecation_extension.deprecation_error_handler', new Definition(
+            'Caciobanu\Behat\DeprecationExtension\Error\Handler\DeprecationErrorHandler',
+            array('%caciobanu.deprecation_extension.mode%', '%caciobanu.deprecation_extension.ignore%')
+        ));
     }
 }
