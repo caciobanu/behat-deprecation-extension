@@ -14,7 +14,23 @@ You can use [Composer](https://getcomposer.org/) to install the extension to you
 composer require --dev caciobanu/behat-deprecation-extension
 ```
 
-Then, in your behat config file `behat.yml`, register the extension:
+It requires PHP 8.1+ and Behat 3.21+ or 4.
+
+Then, in your behat config file `behat.php`, register the extension:
+
+```php
+// behat.php
+use Behat\Config\Config;
+use Behat\Config\Extension;
+use Behat\Config\Profile;
+use Caciobanu\Behat\DeprecationExtension\ServiceContainer\DeprecationExtension;
+
+return (new Config())
+    ->withProfile((new Profile('default'))
+        ->withExtension(new Extension(DeprecationExtension::class)));
+```
+
+Or in your `behat.yml` (Behat 3 only, Behat 4 reads PHP configuration only):
 
 ```yaml
 # behat.yml
@@ -25,12 +41,10 @@ default:
 
 Or like below with a mode set:
 
-```yaml
-# behat.yml
-default:
-    extensions:
-        Caciobanu\Behat\DeprecationExtension:
-            mode: weak
+```php
+new Extension(DeprecationExtension::class, [
+    'mode' => 'weak',
+])
 ```
 
 The following reporting modes are supported:
@@ -54,26 +68,26 @@ Run Behat and enjoy :)
 
 You can filter the file that did make the call to `trigger_error` like this:
 
-```yaml
-default:
-    extensions:
-        Caciobanu\Behat\DeprecationExtension:
-            ignore:
-                - { file: '#symfony#' }
-                - { file: '#my-app#' }
+```php
+new Extension(DeprecationExtension::class, [
+    'ignore' => [
+        ['file' => '#symfony#'],
+        ['file' => '#my-app#'],
+    ],
+])
 ```
 
 It will ignore every files that matches any of the listed regexps
 
 Or you can filter deprecation messages like this:
 
-```yaml
-default:
-    extensions:
-        Caciobanu\Behat\DeprecationExtension:
-            ignore:
-                - { message: '#symfony#' }
-                - { message: '#my-app#' }
+```php
+new Extension(DeprecationExtension::class, [
+    'ignore' => [
+        ['message' => '#symfony#'],
+        ['message' => '#my-app#'],
+    ],
+])
 ```
 
 It will ignore every deprecation message that matches any of the listed regexps
@@ -81,12 +95,12 @@ It will ignore every deprecation message that matches any of the listed regexps
 You can use both filter types at the same time:
 
 
-```yaml
-default:
-    extensions:
-        Caciobanu\Behat\DeprecationExtension:
-            ignore:
-                - { file: '#symfony#', message: '#symfony#' }
+```php
+new Extension(DeprecationExtension::class, [
+    'ignore' => [
+        ['file' => '#symfony#', 'message' => '#symfony#'],
+    ],
+])
 ```
 
 ## Credits

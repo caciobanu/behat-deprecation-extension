@@ -59,7 +59,7 @@ final class RuntimeCallHandler implements CallHandler
     /**
      * {@inheritdoc}
      */
-    public function supportsCall(Call $call)
+    public function supportsCall(Call $call): bool
     {
         return true;
     }
@@ -67,7 +67,7 @@ final class RuntimeCallHandler implements CallHandler
     /**
      * {@inheritdoc}
      */
-    public function handleCall(Call $call)
+    public function handleCall(Call $call): CallResult
     {
         $this->startErrorAndOutputBuffering($call);
         $result = $this->executeCall($call);

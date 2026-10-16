@@ -1,6 +1,7 @@
 <?php
 
 use Behat\Behat\Context\Context;
+use Behat\Step\When;
 use Caciobanu\Behat\DeprecationExtension\Tests\Deprecated\DeprecatedCaller;
 
 /**
@@ -8,18 +9,14 @@ use Caciobanu\Behat\DeprecationExtension\Tests\Deprecated\DeprecatedCaller;
  */
 class FeatureContext implements Context
 {
-    /**
-     * @When I generate silenced error
-     */
+    #[When('I generate silenced error')]
     public function whenIGenerateSilencedError()
     {
         $tmp = new DeprecatedCaller();
         $tmp->callDeprecatedMethodSilenced();
     }
 
-    /**
-     * @When I generate error
-     */
+    #[When('I generate error')]
     public function whenIGenerateError()
     {
 
