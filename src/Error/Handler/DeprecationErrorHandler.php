@@ -85,8 +85,11 @@ class DeprecationErrorHandler
 
         if ($call instanceof DefinitionCall) {
             $scenario = $this->detectScenario($call->getFeature(), $call->getStep());
+            // The legacy parsing mode of gherkin, the default one in Behat 3, strips the "@" of tags,
+            // the other modes keep it.
+            $tags = array_merge($call->getFeature()->getTags(), $scenario->getTags());
 
-            if ($call->getFeature()->hasTag('legacy') || $scenario->hasTag('legacy')) {
+            if (in_array('legacy', $tags, true) || in_array('@legacy', $tags, true)) {
                 $group = 'legacy';
             }
         }
